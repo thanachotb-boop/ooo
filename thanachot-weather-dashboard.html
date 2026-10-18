@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalasin Weather Dashboard - ธนโชติ ป่านแก้ว</title>
+  <style>
+    :root{--bg:#f3f4f6;--card:#fff;--text:#10233f;--muted:#64748b;--orange:#ffa000;--cyan:#15b6cf;--shadow:0 8px 24px rgba(15,23,42,.08);--radius:22px}
+    *{box-sizing:border-box}body{margin:0;font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{width:min(1120px,calc(100% - 28px));margin:22px auto 50px}.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .header{padding:28px 30px;margin-bottom:24px}.header h1{margin:0;font-size:clamp(1.35rem,2.5vw,2rem);line-height:1.3}.header p{margin:8px 0 0;color:var(--muted);font-size:.95rem}
+    .badge{display:inline-block;margin-left:6px;padding:3px 9px;border-radius:8px;background:#eef2f7;color:#475569;font-family:Consolas,monospace;font-size:.86rem}
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}.stat{color:#fff;padding:26px 30px;border-radius:20px;box-shadow:var(--shadow)}
+    .temp{background:var(--orange)}.hum{background:var(--cyan)}.label{font-weight:700;font-size:.95rem}.value{margin-top:10px;font-size:3.05rem;line-height:1;font-weight:900}
+    .chart-card{padding:26px;margin-bottom:24px;overflow:hidden}.chart-title{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px}.chart-title h2,.table-card h2{margin:0;font-size:1.16rem}
+    .legend{display:flex;gap:16px;color:var(--muted);font-size:.88rem;flex-wrap:wrap}.legend span::before{content:"";display:inline-block;width:28px;height:6px;border:2px solid currentColor;margin-right:7px;vertical-align:middle}.l1{color:var(--orange)}.l2{color:var(--cyan)}
+    .chart-wrap{width:100%;overflow-x:auto}svg{display:block;width:100%;min-width:720px;height:auto}.gridline{stroke:#dce4ec;stroke-width:1}.axis-label{fill:#667085;font-size:13px}.temp-line{fill:none;stroke:#ffa000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.hum-line{fill:none;stroke:#15b6cf;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.temp-fill{fill:rgba(255,160,0,.10)}.hum-fill{fill:rgba(21,182,207,.10)}.dot-temp{fill:#fff;stroke:#ffa000;stroke-width:3}.dot-hum{fill:#fff;stroke:#15b6cf;stroke-width:3}
+    .table-card{padding:24px;overflow:hidden}.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:620px}th,td{padding:14px 15px;border-bottom:1px solid #e8edf3;text-align:left;font-size:.95rem}th{background:#f8fafc;color:#475569;font-weight:800}tr:last-child td{border-bottom:0}
+    .status{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border-radius:999px;background:#fff7e6;color:#b76a00;font-weight:700;font-size:.82rem}.dot{width:8px;height:8px;border-radius:50%;background:#ffa000}
+    .note{margin-top:16px;padding:14px 16px;border-radius:14px;background:#eef6ff;color:#46627d;font-size:.9rem;line-height:1.6}footer{text-align:center;color:#8492a6;font-size:.85rem;padding:24px 8px 8px}
+    @media(max-width:720px){.stat-grid{grid-template-columns:1fr}.header,.chart-card,.table-card{padding:20px}.stat{padding:22px}.value{font-size:2.65rem}.chart-title{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <section class="card header">
+    <h1>Kalasin Weather &amp; IoT Sensor Dashboard — ธนโชติ ป่านแก้ว</h1>
+    <p>โหมดออฟไลน์ / ไม่เชื่อม Google Sheets <span class="badge">Static Data</span></p>
+  </section>
+
+  <section class="stat-grid">
+    <div class="stat temp"><div class="label">อุณหภูมิปัจจุบัน</div><div class="value">34 °C</div></div>
+    <div class="stat hum"><div class="label">ความชื้นปัจจุบัน</div><div class="value">55 %</div></div>
+  </section>
+
+  <section class="card chart-card">
+    <div class="chart-title">
+      <h2>กราฟอุณหภูมิและความชื้นวันนี้</h2>
+      <div class="legend"><span class="l1">อุณหภูมิ (°C)</span><span class="l2">ความชื้น (%)</span></div>
+    </div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 980 430" role="img" aria-label="กราฟอุณหภูมิและความชื้นแบบคงที่">
+        <line class="gridline" x1="75" y1="40" x2="940" y2="40"/><line class="gridline" x1="75" y1="95" x2="940" y2="95"/><line class="gridline" x1="75" y1="150" x2="940" y2="150"/><line class="gridline" x1="75" y1="205" x2="940" y2="205"/><line class="gridline" x1="75" y1="260" x2="940" y2="260"/><line class="gridline" x1="75" y1="315" x2="940" y2="315"/><line class="gridline" x1="75" y1="370" x2="940" y2="370"/>
+        <line class="gridline" x1="75" y1="40" x2="75" y2="370"/><line class="gridline" x1="219" y1="40" x2="219" y2="370"/><line class="gridline" x1="363" y1="40" x2="363" y2="370"/><line class="gridline" x1="507" y1="40" x2="507" y2="370"/><line class="gridline" x1="651" y1="40" x2="651" y2="370"/><line class="gridline" x1="795" y1="40" x2="795" y2="370"/><line class="gridline" x1="940" y1="40" x2="940" y2="370"/>
+        <text class="axis-label" x="40" y="45">65</text><text class="axis-label" x="40" y="100">60</text><text class="axis-label" x="40" y="155">55</text><text class="axis-label" x="40" y="210">50</text><text class="axis-label" x="40" y="265">45</text><text class="axis-label" x="40" y="320">40</text><text class="axis-label" x="40" y="375">35</text>
+        <path class="hum-fill" d="M75 42 L219 90 L363 145 L507 178 L651 205 L795 205 L940 205 L940 370 L75 370 Z"/><polyline class="hum-line" points="75,42 219,90 363,145 507,178 651,205 795,205 940,205"/>
+        <circle class="dot-hum" cx="75" cy="42" r="4"/><circle class="dot-hum" cx="219" cy="90" r="4"/><circle class="dot-hum" cx="363" cy="145" r="4"/><circle class="dot-hum" cx="507" cy="178" r="4"/><circle class="dot-hum" cx="651" cy="205" r="4"/><circle class="dot-hum" cx="795" cy="205" r="4"/><circle class="dot-hum" cx="940" cy="205" r="4"/>
+        <path class="temp-fill" d="M75 340 L219 318 L363 307 L507 296 L651 285 L795 285 L940 285 L940 370 L75 370 Z"/><polyline class="temp-line" points="75,340 219,318 363,307 507,296 651,285 795,285 940,285"/>
+        <circle class="dot-temp" cx="75" cy="340" r="4"/><circle class="dot-temp" cx="219" cy="318" r="4"/><circle class="dot-temp" cx="363" cy="307" r="4"/><circle class="dot-temp" cx="507" cy="296" r="4"/><circle class="dot-temp" cx="651" cy="285" r="4"/><circle class="dot-temp" cx="795" cy="285" r="4"/><circle class="dot-temp" cx="940" cy="285" r="4"/>
+        <text class="axis-label" x="58" y="405">09:00</text><text class="axis-label" x="202" y="405">10:00</text><text class="axis-label" x="346" y="405">11:00</text><text class="axis-label" x="490" y="405">12:00</text><text class="axis-label" x="634" y="405">13:00</text><text class="axis-label" x="778" y="405">14:00</text><text class="axis-label" x="923" y="405">15:00</text>
+      </svg>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <h2>ตารางข้อมูลวันนี้</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>เวลา</th><th>อุณหภูมิ</th><th>ความชื้น</th><th>สถานะ</th></tr></thead>
+        <tbody>
+          <tr><td>09:00</td><td>29 °C</td><td>73 %</td><td><span class="status"><span class="dot"></span>มีเมฆบางส่วน</span></td></tr>
+          <tr><td>10:00</td><td>31 °C</td><td>68 %</td><td><span class="status"><span class="dot"></span>มีเมฆบางส่วน</span></td></tr>
+          <tr><td>11:00</td><td>32 °C</td><td>61 %</td><td><span class="status"><span class="dot"></span>มีเมฆบางส่วน</span></td></tr>
+          <tr><td>12:00</td><td>33 °C</td><td>58 %</td><td><span class="status"><span class="dot"></span>มีเมฆบางส่วน</span></td></tr>
+          <tr><td>13:00</td><td>34 °C</td><td>55 %</td><td><span class="status"><span class="dot"></span>มีเมฆบางส่วน</span></td></tr>
+          <tr><td>14:00</td><td>34 °C</td><td>55 %</td><td><span class="status"><span class="dot"></span>มีเมฆบางส่วน</span></td></tr>
+          <tr><td>15:00</td><td>34 °C</td><td>55 %</td><td><span class="status"><span class="dot"></span>มีเมฆบางส่วน</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">ข้อมูลในหน้าเว็บนี้เป็นข้อมูลแบบคงที่ ไม่ได้เชื่อม Google Sheets, API หรือเซนเซอร์ ดังนั้นค่าจะไม่เปลี่ยนอัตโนมัติเมื่อเปิดเว็บภายหลัง</div>
+  </section>
+  <footer>จัดทำโดย ธนโชติ ป่านแก้ว · Kalasin Weather Dashboard</footer>
+</main>
+</body>
+</html>
